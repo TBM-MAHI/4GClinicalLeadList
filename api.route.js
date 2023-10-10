@@ -6,6 +6,8 @@ let TotalLEAD_Count = 0;
 
 cron.schedule("*/5 * * * *", async() => {
     TotalLEAD_Count = await api_Controllers.fetchLeadCountAPI();
+    console.log("from cron job");
+    console.log(TotalLEAD_Count);
 })
 api_Router.get('/leadCount', async (req, res) => {
     return res.status(200).json({ count: TotalLEAD_Count });
