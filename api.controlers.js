@@ -26,7 +26,7 @@ function fetchLeadCountAPI() {
                 await fetchLeadCount(response.data.paging.next.after);
             }
         } catch (error) {
-            console.error('Error fetching tickets:', error);
+            console.error('Error fetching list', error);
         }
     };
     return fetchLeadCount().then(() => TotalLeadCount);
@@ -59,7 +59,7 @@ function fetchMQLCountAPI() {
                 await fetchMQLCount(response.data.paging.next.after);
             }
         } catch (error) {
-            console.error('Error fetching tickets:', error);
+            console.error('Error fetching list:', error);
         }
     };
     return fetchMQLCount().then(() => TotalMQLCount);
@@ -92,7 +92,7 @@ function fetchSQLCountAPI() {
                 await fetchSQLCount(response.data.paging.next.after);
             }
         } catch (error) {
-            console.error('Error fetching tickets:', error);
+            console.error('Error fetching list:', error);
         }
     };
     return fetchSQLCount().then(() => TotalSQLCount);
@@ -124,7 +124,7 @@ function fetchOpportunityCountAPI() {
                 await fetchOpportunityCount(response.data.paging.next.after);
             }
         } catch (error) {
-            console.error('Error fetching tickets:', error);
+            console.error('Error fetching list:', error);
         }
     };
     return fetchOpportunityCount().then(() => TotalOpporCount);
@@ -157,7 +157,7 @@ function fetchCustomerCountAPI() {
                 await fetchCUSTOMERCount(response.data.paging.next.after);
             }
         } catch (error) {
-            console.error('Error fetching tickets:', error);
+            console.error('Error fetching list:', error);
         }
     };
     return fetchCUSTOMERCount().then(() => TotalCustomerCount);

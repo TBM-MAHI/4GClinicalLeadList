@@ -4,10 +4,10 @@ let api_Router = express.Router();
 let api_Controllers = require('./api.controlers');
 let TotalLEAD_Count = 0;
 
-cron.schedule("*/10 * * * *", async() => {
+cron.schedule("*/3 * * * *", async() => {
     TotalLEAD_Count = await api_Controllers.fetchLeadCountAPI();
-    console.log("from cron job");
-    console.log(TotalLEAD_Count);
+    console.log("from cron job - ", TotalLEAD_Count);
+   
 })
 api_Router.get('/leadCount', async (req, res) => {
     return res.status(200).json({ count: TotalLEAD_Count });
