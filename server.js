@@ -3,8 +3,9 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-let api_Router = require('./api.route');
+let API_routes = require('./api.route');
 
-app.use(api_Router)
+app.use(API_routes.api_Router)
+API_routes.getLeadCount();
 
 app.listen(PORT , () => console.log(`Listening on port${PORT}...`));
