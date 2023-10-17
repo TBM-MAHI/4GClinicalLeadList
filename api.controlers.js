@@ -165,11 +165,11 @@ function fetchCustomerCountAPI() {
 
 function fetchDealAmountAPI() {
     let TotaldealAmount = 0;
-   
+
     const fetchdealAmount = async (afterval = null) => {
         let data = {
             limit: 100,
-            after: afterval? Number(afterval):0,
+            after: afterval ? Number(afterval) : 0,
             filterGroups: [
                 {
                     filters: [
@@ -183,26 +183,25 @@ function fetchDealAmountAPI() {
                     ]
                 }
             ]
-        } 
+        }
         try {
-            let request = await fetch('https://api.hubapi.com/crm/v3/objects/deals/search', {
-                method: 'POST',
+            const response = await axios.post('https://api.hubapi.com/crm/v3/objects/deals/search', data, {
                 headers: {
                     'Content-Type': 'application/json',
                     'authorization': `Bearer ${process.env.PRIVATE_APP_ACCESS_DEALS}`
                 },
-                body: JSON.stringify(data)
-            })
-            let result = await request.json();
+            });
+
+            const result = response.data;
+          //  console.log(result);
             let amountArray = result.results.map((deal) => Number(deal.properties.amount));
             TotaldealAmount = TotaldealAmount + amountArray.reduce(
                 (accumulator, d) => {
                     return (accumulator = accumulator + d);
                 })
 
-          //  console.log(amountArray);
-          //  console.log(TotaldealAmount);
-
+            //  console.log(amountArray);
+            //  console.log(TotaldealAmount);
 
             if (result.paging && result.paging.next.after) {
                 console.log(result.paging.next.after);
@@ -213,8 +212,8 @@ function fetchDealAmountAPI() {
             console.error('Error fetching :', error);
         }
     };
-   // fetchdealAmount();
-   return fetchdealAmount().then(() => Math.round(TotaldealAmount));
+    // fetchdealAmount();
+    return fetchdealAmount().then(() => Math.round(TotaldealAmount));
 }
 
 module.exports = {
