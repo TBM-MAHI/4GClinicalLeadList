@@ -163,10 +163,65 @@ function fetchCustomerCountAPI() {
     return fetchCUSTOMERCount().then(() => TotalCustomerCount);
 }
 
+function fetchDealAmountAPI() {
+    let TotaldealAmount = 0;
+   
+    const fetchdealAmount = async (afterval = null) => {
+        let data = {
+            limit: 100,
+            after: afterval? Number(afterval):0,
+            filterGroups: [
+                {
+                    filters: [
+                        {
+                            propertyName: "dealstage",
+                            operator: "IN",
+                            values: [
+                                "contractsent"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        } 
+        try {
+            let request = await fetch('https://api.hubapi.com/crm/v3/objects/deals/search', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': `Bearer ${process.env.PRIVATE_APP_ACCESS_DEALS}`
+                },
+                body: JSON.stringify(data)
+            })
+            let result = await request.json();
+            let amountArray = result.results.map((deal) => Number(deal.properties.amount));
+            TotaldealAmount = TotaldealAmount + amountArray.reduce(
+                (accumulator, d) => {
+                    return (accumulator = accumulator + d);
+                })
+
+          //  console.log(amountArray);
+          //  console.log(TotaldealAmount);
+
+
+            if (result.paging && result.paging.next.after) {
+                console.log(result.paging.next.after);
+                await fetchdealAmount(result.paging.next.after);
+            }
+
+        } catch (error) {
+            console.error('Error fetching :', error);
+        }
+    };
+   // fetchdealAmount();
+   return fetchdealAmount().then(() => Math.round(TotaldealAmount));
+}
+
 module.exports = {
     fetchLeadCountAPI,
     fetchMQLCountAPI,
     fetchSQLCountAPI,
     fetchOpportunityCountAPI,
-    fetchCustomerCountAPI
+    fetchCustomerCountAPI,
+    fetchDealAmountAPI
 };

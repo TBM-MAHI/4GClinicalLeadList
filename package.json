@@ -1,6 +1,6 @@
 {
-  "name": "4gclinicalleadlist",
-  "version": "1.0.0",
+  "name": "hslistApi",
+  "version": "1.2.1",
   "description": "",
   "main": "api.route.js",
   "scripts": {
