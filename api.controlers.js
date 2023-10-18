@@ -193,18 +193,17 @@ function fetchDealAmountAPI() {
             });
 
             const result = response.data;
-          //  console.log(result);
+        
             let amountArray = result.results.map((deal) => Number(deal.properties.amount));
             TotaldealAmount = TotaldealAmount + amountArray.reduce(
                 (accumulator, d) => {
                     return (accumulator = accumulator + d);
                 })
-
             //  console.log(amountArray);
             //  console.log(TotaldealAmount);
 
             if (result.paging && result.paging.next.after) {
-                console.log(result.paging.next.after);
+                console.log("fetched ",result.paging.next.after+" records.");
                 await fetchdealAmount(result.paging.next.after);
             }
 
@@ -213,7 +212,10 @@ function fetchDealAmountAPI() {
         }
     };
     // fetchdealAmount();
-    return fetchdealAmount().then(() => Math.round(TotaldealAmount));
+    return fetchdealAmount().then(() => {
+        console.log("Deal api Executed successfully. TotaldealAmount - ", TotaldealAmount);
+      return Math.round(TotaldealAmount)
+    });
 }
 
 module.exports = {
