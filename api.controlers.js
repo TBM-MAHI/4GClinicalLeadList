@@ -172,13 +172,86 @@ function fetchDealAmountAPI() {
             after: afterval ? Number(afterval) : 0,
             filterGroups: [
                 {
-                    filters: [
+                    "filters": [
                         {
-                            propertyName: "dealstage",
-                            operator: "IN",
-                            values: [
+                            "propertyName": "dealstage",
+                            "operator": "IN",
+                            "values": [
                                 "contractsent"
                             ]
+                        },
+                        {
+                            "propertyName": "amount",
+                            "operator": "GT",
+                            "value": "0"
+                        },
+                        {
+                            "propertyName": "pipeline",
+                            "operator": "EQ",
+                            "value": "default"
+                        }
+                    ]
+                },
+                {
+                    "filters": [
+                        {
+                            "propertyName": "dealstage",
+                            "operator": "IN",
+                            "values": [
+                                "865983"
+                            ]
+                        },
+                        {
+                            "propertyName": "amount",
+                            "operator": "GT",
+                            "value": "0"
+                        },
+                        {
+                            "propertyName": "pipeline",
+                            "operator": "EQ",
+                            "value": "865972"
+                        }
+                    ]
+                },
+                {
+                    "filters": [
+                        {
+                            "propertyName": "dealstage",
+                            "operator": "IN",
+                            "values": [
+                                "677334"
+                            ]
+                        },
+                        {
+                            "propertyName": "amount",
+                            "operator": "GT",
+                            "value": "0"
+                        },
+                        {
+                            "propertyName": "pipeline",
+                            "operator": "EQ",
+                            "value": "677329"
+                        }
+                    ]
+                },
+                {
+                    "filters": [
+                        {
+                            "propertyName": "dealstage",
+                            "operator": "IN",
+                            "values": [
+                                "52261939"
+                            ]
+                        },
+                        {
+                            "propertyName": "amount",
+                            "operator": "GT",
+                            "value": "0"
+                        },
+                        {
+                            "propertyName": "pipeline",
+                            "operator": "EQ",
+                            "value": "21755496"
                         }
                     ]
                 }
@@ -203,7 +276,7 @@ function fetchDealAmountAPI() {
             //  console.log(TotaldealAmount);
 
             if (result.paging && result.paging.next.after) {
-                console.log("fetched ",result.paging.next.after+" records.");
+                console.log("fetched ",result.paging.next.after+"   records.");
                 await fetchdealAmount(result.paging.next.after);
             }
 
