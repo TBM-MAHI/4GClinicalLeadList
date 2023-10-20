@@ -1,166 +1,138 @@
 const axios = require("axios");
 
-function fetchLeadCountAPI() {
-    let TotalLeadCount = 0;
-    const fetchLeadCount = async (afterURL = null) => {
-        try {
-            const params = {
-                limit: 100,
-            };
-            if (afterURL) {
-                params.after = afterURL;
-            }
-            const headers = {
-                'accept': 'application/json',
-                'authorization': `Bearer ${process.env.PRIVATE_APP_ACCESS}`
-            };
-
-            if (!process.env.PRIVATE_APP_ACCESS) {
-                throw new Error("PRIVATE_APP_ACCESS is not defined in environment variables");
-            }
-
-            const response = await axios.get('https://api.hubapi.com/crm/v3/lists/8134/memberships', { params, headers });
-            TotalLeadCount += response.data.results.length;
-
-            if (response.data.paging && response.data.paging.next) {
-                await fetchLeadCount(response.data.paging.next.after);
-            }
-        } catch (error) {
-            console.error('Error fetching list', error);
+async function fetchLeadCountAPI(nextPage = null) {
+    try {
+        const params = {
+            limit: 100,
+        };
+        if (nextPage) {
+            params.after = nextPage;
         }
-    };
-    return fetchLeadCount().then(() => TotalLeadCount);
+
+        const headers = {
+            'accept': 'application/json',
+            'authorization': `Bearer ${process.env.PRIVATE_APP_ACCESS_LIST}`
+        };
+
+        const response = await axios.get('https://api.hubapi.com/crm/v3/lists/8134/memberships', { params, headers });
+        //console.log(response.data);
+
+        if (!response.data.paging || !response.data.paging.next) {
+            return response.data.results.length;
+        }
+        //console.log(response.data.paging.next.after);
+        return response.data.results.length + await fetchLeadCountAPI(response.data.paging.next.after);
+    } catch (error) {
+        console.error('Error fetching list:', error);
+    }
 }
 
-function fetchMQLCountAPI() {
-    let TotalMQLCount = 0;
-    const fetchMQLCount = async (afterURL = null) => {
-        try {
-            const params = {
-                limit: 100,
-            };
-            if (afterURL) {
-                params.after = afterURL;
-            }
-
-            const headers = {
-                'accept': 'application/json',
-                'authorization': `Bearer ${process.env.PRIVATE_APP_ACCESS}`
-            };
-
-            if (!process.env.PRIVATE_APP_ACCESS) {
-                throw new Error("PRIVATE_APP_ACCESS is not defined in environment variables");
-            }
-
-            const response = await axios.get('https://api.hubapi.com/crm/v3/lists/8135/memberships', { params, headers });
-            TotalMQLCount += response.data.results.length;
-
-            if (response.data.paging && response.data.paging.next) {
-                await fetchMQLCount(response.data.paging.next.after);
-            }
-        } catch (error) {
-            console.error('Error fetching list:', error);
+async function fetchMQLCountAPI(nextPage = null) {
+    try {
+        const params = {
+            limit: 100,
+        };
+        if (nextPage) {
+            params.after = nextPage;
         }
-    };
-    return fetchMQLCount().then(() => TotalMQLCount);
+
+        const headers = {
+            'accept': 'application/json',
+            'authorization': `Bearer ${process.env.PRIVATE_APP_ACCESS_LIST}`
+        };
+
+        const response = await axios.get('https://api.hubapi.com/crm/v3/lists/8135/memberships', { params, headers });
+        //console.log(response.data);
+
+        if (!response.data.paging || !response.data.paging.next) {
+            return response.data.results.length;
+        }
+        //console.log(response.data.paging.next.after);
+        return response.data.results.length + await fetchMQLCountAPI(response.data.paging.next.after);
+    } catch (error) {
+        console.error('Error fetching list:', error);
+    }
 }
 
-function fetchSQLCountAPI() {
-    let TotalSQLCount = 0;
-    const fetchSQLCount = async (afterURL = null) => {
-        try {
-            const params = {
-                limit: 100,
-            };
-            if (afterURL) {
-                params.after = afterURL;
-            }
-
-            const headers = {
-                'accept': 'application/json',
-                'authorization': `Bearer ${process.env.PRIVATE_APP_ACCESS}`
-            };
-
-            if (!process.env.PRIVATE_APP_ACCESS) {
-                throw new Error("PRIVATE_APP_ACCESS is not defined in environment variables");
-            }
-
-            const response = await axios.get('https://api.hubapi.com/crm/v3/lists/8136/memberships', { params, headers });
-            TotalSQLCount += response.data.results.length;
-
-            if (response.data.paging && response.data.paging.next) {
-                await fetchSQLCount(response.data.paging.next.after);
-            }
-        } catch (error) {
-            console.error('Error fetching list:', error);
+async function fetchSQLCountAPI(nextPage = null) {
+    try {
+        const params = {
+            limit: 100,
+        };
+        if (nextPage) {
+            params.after = nextPage;
         }
-    };
-    return fetchSQLCount().then(() => TotalSQLCount);
-}
-function fetchOpportunityCountAPI() {
-    let TotalOpporCount = 0;
-    const fetchOpportunityCount = async (afterURL = null) => {
-        try {
-            const params = {
-                limit: 100,
-            };
-            if (afterURL) {
-                params.after = afterURL;
-            }
 
-            const headers = {
-                'accept': 'application/json',
-                'authorization': `Bearer ${process.env.PRIVATE_APP_ACCESS}`
-            };
+        const headers = {
+            'accept': 'application/json',
+            'authorization': `Bearer ${process.env.PRIVATE_APP_ACCESS_LIST}`
+        };
 
-            if (!process.env.PRIVATE_APP_ACCESS) {
-                throw new Error("PRIVATE_APP_ACCESS is not defined in environment variables");
-            }
+        const response = await axios.get('https://api.hubapi.com/crm/v3/lists/8136/memberships', { params, headers });
+        //console.log(response.data);
 
-            const response = await axios.get('https://api.hubapi.com/crm/v3/lists/8147/memberships', { params, headers });
-            TotalOpporCount += response.data.results.length;
-
-            if (response.data.paging && response.data.paging.next) {
-                await fetchOpportunityCount(response.data.paging.next.after);
-            }
-        } catch (error) {
-            console.error('Error fetching list:', error);
+        if (!response.data.paging || !response.data.paging.next) {
+            return response.data.results.length;
         }
-    };
-    return fetchOpportunityCount().then(() => TotalOpporCount);
+        //console.log(response.data.paging.next.after);
+        return response.data.results.length + await fetchSQLCountAPI(response.data.paging.next.after);
+    } catch (error) {
+        console.error('Error fetching list:', error);
+    }
 }
 
-function fetchCustomerCountAPI() {
-    let TotalCustomerCount = 0;
-    const fetchCUSTOMERCount = async (afterURL = null) => {
-        try {
-            const params = {
-                limit: 100,
-            };
-            if (afterURL) {
-                params.after = afterURL;
-            }
-
-            const headers = {
-                'accept': 'application/json',
-                'authorization': `Bearer ${process.env.PRIVATE_APP_ACCESS}`
-            };
-
-            if (!process.env.PRIVATE_APP_ACCESS) {
-                throw new Error("PRIVATE_APP_ACCESS is not defined in environment variables");
-            }
-
-            const response = await axios.get('https://api.hubapi.com/crm/v3/lists/8150/memberships', { params, headers });
-            TotalCustomerCount += response.data.results.length;
-
-            if (response.data.paging && response.data.paging.next) {
-                await fetchCUSTOMERCount(response.data.paging.next.after);
-            }
-        } catch (error) {
-            console.error('Error fetching list:', error);
+async function fetchOpportunityCountAPI(nextPage = null) {
+    try {
+        const params = {
+            limit: 100,
+        };
+        if (nextPage) {
+            params.after = nextPage;
         }
-    };
-    return fetchCUSTOMERCount().then(() => TotalCustomerCount);
+
+        const headers = {
+            'accept': 'application/json',
+            'authorization': `Bearer ${process.env.PRIVATE_APP_ACCESS_LIST}`
+        };
+
+        const response = await axios.get('https://api.hubapi.com/crm/v3/lists/8147/memberships', { params, headers });
+        //console.log(response.data);
+
+        if (!response.data.paging || !response.data.paging.next) {
+            return response.data.results.length;
+        }
+        //console.log(response.data.paging.next.after);
+        return response.data.results.length + await fetchOpportunityCountAPI(response.data.paging.next.after);
+    } catch (error) {
+        console.error('Error fetching list:', error);
+    }
+}
+
+async function fetchCustomerCountAPI(nextPage = null) {
+    try {
+        const params = {
+            limit: 100,
+        };
+        if (nextPage) {
+            params.after = nextPage;
+        }
+
+        const headers = {
+            'accept': 'application/json',
+            'authorization': `Bearer ${process.env.PRIVATE_APP_ACCESS_LIST}`
+        };
+
+        const response = await axios.get('https://api.hubapi.com/crm/v3/lists/8150/memberships', { params, headers });
+        //console.log(response.data);
+
+        if (!response.data.paging || !response.data.paging.next) {
+            return response.data.results.length;
+        }
+        //console.log(response.data.paging.next.after);
+        return response.data.results.length + await fetchCustomerCountAPI(response.data.paging.next.after);
+    } catch (error) {
+        console.error('Error fetching list:', error);
+    }
 }
 
 function fetchDealAmountAPI() {

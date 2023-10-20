@@ -6,7 +6,9 @@ let TotalLEAD_Count = 0;
 
 async function getLeadCount() { 
     TotalLEAD_Count = await api_Controllers.fetchLeadCountAPI();
-    console.log(`from cron job Total Lead Count-${TotalLEAD_Count} at ${new Date().toLocaleString() }`);
+    console.log(`from cron job Total Lead Count-${TotalLEAD_Count} at ${new Date().toLocaleString(
+        { timeZone: 'Asia/Dhaka' }
+    )}`);
 }
 cron.schedule("0 */12 * * *", getLeadCount);
 
@@ -15,16 +17,26 @@ api_Router.get('/leadCount', async (req, res) => {
 })
 
 api_Router.get('/mqlCount', async (req, res) => {
-    return res.status(200).json({ count:Number (await api_Controllers.fetchMQLCountAPI() ) } );
+    let TotalMQLCount = await api_Controllers.fetchMQLCountAPI();
+    console.log(TotalMQLCount);
+    return res.status(200).json({ count: Number(TotalMQLCount) });
 })
+
 api_Router.get('/sqlCount', async (req, res) => {
-    return res.status(200).json({ count: await api_Controllers.fetchSQLCountAPI() });
+    let TotalSQLCount = await api_Controllers.fetchSQLCountAPI();
+    console.log(TotalSQLCount);
+    return res.status(200).json({ count: Number(TotalSQLCount) });
 })
-api_Router.get('/OpportunityCount', async (req, res) => {
-    return res.status(200).json({ count: await api_Controllers.fetchOpportunityCountAPI() });
+api_Router.get('/opportunityCount', async (req, res) => {
+    let TotalOpporCount = await api_Controllers.fetchOpportunityCountAPI();
+    console.log(TotalOpporCount);
+    return res.status(200).json({ count: Number(TotalOpporCount) });
 })
+
 api_Router.get('/customerCount', async (req, res) => {
-    return res.status(200).json({ count:  await api_Controllers.fetchCustomerCountAPI() });
+    let TotalCustomerCount = await api_Controllers.fetchCustomerCountAPI();
+    console.log(TotalCustomerCount);
+    return res.status(200).json({ count: Number(TotalCustomerCount) });
 })
 api_Router.get('/dealAmount', async (req, res) => {
     return res.status(200).json({ amount:  await api_Controllers.fetchDealAmountAPI() });
