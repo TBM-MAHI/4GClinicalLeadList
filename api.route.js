@@ -39,7 +39,9 @@ api_Router.get('/customerCount', async (req, res) => {
     return res.status(200).json({ count: Number(TotalCustomerCount) });
 })
 api_Router.get('/dealAmount', async (req, res) => {
-    return res.status(200).json({ amount:  await api_Controllers.fetchDealAmountAPI() });
+    let TotalDealAmount = await api_Controllers.fetchDealAmountAPI();
+    console.log(`Deal api Executed successfully. TotaldealAmount -  ${TotalDealAmount}`);
+    return res.status(200).json({ amount: TotalDealAmount });
 })
 
 module.exports = {api_Router , getLeadCount};

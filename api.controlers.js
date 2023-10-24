@@ -135,133 +135,121 @@ async function fetchCustomerCountAPI(nextPage = null) {
     }
 }
 
-function fetchDealAmountAPI() {
-    let TotaldealAmount = 0;
-
-    const fetchdealAmount = async (afterval = null) => {
-        let data = {
-            limit: 100,
-            after: afterval ? Number(afterval) : 0,
-            filterGroups: [
-                {
-                    "filters": [
-                        {
-                            "propertyName": "dealstage",
-                            "operator": "IN",
-                            "values": [
-                                "contractsent"
-                            ]
-                        },
-                        {
-                            "propertyName": "amount",
-                            "operator": "GT",
-                            "value": "0"
-                        },
-                        {
-                            "propertyName": "pipeline",
-                            "operator": "EQ",
-                            "value": "default"
-                        }
-                    ]
-                },
-                {
-                    "filters": [
-                        {
-                            "propertyName": "dealstage",
-                            "operator": "IN",
-                            "values": [
-                                "865983"
-                            ]
-                        },
-                        {
-                            "propertyName": "amount",
-                            "operator": "GT",
-                            "value": "0"
-                        },
-                        {
-                            "propertyName": "pipeline",
-                            "operator": "EQ",
-                            "value": "865972"
-                        }
-                    ]
-                },
-                {
-                    "filters": [
-                        {
-                            "propertyName": "dealstage",
-                            "operator": "IN",
-                            "values": [
-                                "677334"
-                            ]
-                        },
-                        {
-                            "propertyName": "amount",
-                            "operator": "GT",
-                            "value": "0"
-                        },
-                        {
-                            "propertyName": "pipeline",
-                            "operator": "EQ",
-                            "value": "677329"
-                        }
-                    ]
-                },
-                {
-                    "filters": [
-                        {
-                            "propertyName": "dealstage",
-                            "operator": "IN",
-                            "values": [
-                                "52261939"
-                            ]
-                        },
-                        {
-                            "propertyName": "amount",
-                            "operator": "GT",
-                            "value": "0"
-                        },
-                        {
-                            "propertyName": "pipeline",
-                            "operator": "EQ",
-                            "value": "21755496"
-                        }
-                    ]
-                }
-            ]
-        }
-        try {
-            const response = await axios.post('https://api.hubapi.com/crm/v3/objects/deals/search', data, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'authorization': `Bearer ${process.env.PRIVATE_APP_ACCESS_DEALS}`
-                },
-            });
-
-            const result = response.data;
-        
-            let amountArray = result.results.map((deal) => Number(deal.properties.amount));
-            TotaldealAmount = TotaldealAmount + amountArray.reduce(
-                (accumulator, d) => {
-                    return (accumulator = accumulator + d);
-                })
-            //  console.log(amountArray);
-            //  console.log(TotaldealAmount);
-
-            if (result.paging && result.paging.next.after) {
-                console.log("fetched ",result.paging.next.after+"   records.");
-                await fetchdealAmount(result.paging.next.after);
+const fetchDealAmountAPI = async (afterval = null) => {
+    let data = {
+        limit: 100,
+        after: afterval ? Number(afterval) : 0,
+        filterGroups: [
+            {
+                "filters": [
+                    {
+                        "propertyName": "dealstage",
+                        "operator": "IN",
+                        "values": [
+                            "contractsent"
+                        ]
+                    },
+                    {
+                        "propertyName": "amount",
+                        "operator": "GT",
+                        "value": "0"
+                    },
+                    {
+                        "propertyName": "pipeline",
+                        "operator": "EQ",
+                        "value": "default"
+                    }
+                ]
+            },
+            {
+                "filters": [
+                    {
+                        "propertyName": "dealstage",
+                        "operator": "IN",
+                        "values": [
+                            "865983"
+                        ]
+                    },
+                    {
+                        "propertyName": "amount",
+                        "operator": "GT",
+                        "value": "0"
+                    },
+                    {
+                        "propertyName": "pipeline",
+                        "operator": "EQ",
+                        "value": "865972"
+                    }
+                ]
+            },
+            {
+                "filters": [
+                    {
+                        "propertyName": "dealstage",
+                        "operator": "IN",
+                        "values": [
+                            "677334"
+                        ]
+                    },
+                    {
+                        "propertyName": "amount",
+                        "operator": "GT",
+                        "value": "0"
+                    },
+                    {
+                        "propertyName": "pipeline",
+                        "operator": "EQ",
+                        "value": "677329"
+                    }
+                ]
+            },
+            {
+                "filters": [
+                    {
+                        "propertyName": "dealstage",
+                        "operator": "IN",
+                        "values": [
+                            "52261939"
+                        ]
+                    },
+                    {
+                        "propertyName": "amount",
+                        "operator": "GT",
+                        "value": "0"
+                    },
+                    {
+                        "propertyName": "pipeline",
+                        "operator": "EQ",
+                        "value": "21755496"
+                    }
+                ]
             }
+        ]
+    }
 
-        } catch (error) {
-            console.error('Error fetching :', error);
-        }
-    };
-    // fetchdealAmount();
-    return fetchdealAmount().then(() => {
-        console.log("Deal api Executed successfully. TotaldealAmount - ", TotaldealAmount);
-      return Math.round(TotaldealAmount)
-    });
-}
+    try {
+        const response = await axios.post('https://api.hubapi.com/crm/v3/objects/deals/search', data, {
+            headers: {
+                'Content-Type': 'application/json',
+                'authorization': `Bearer ${process.env.PRIVATE_APP_ACCESS_DEALS}`
+            },
+        });
+
+        const result = response.data;
+        let amountArray = result.results.map((deal) => Number(deal.properties.amount));
+       // console.log(amountArray);
+
+        if (!result.paging || !result.paging.next.after)
+            return amountArray.reduce((acc, current) => acc + current);
+
+        console.log("fetched ", result.paging.next.after + " deal records.");
+        return amountArray.reduce(
+            (accumulator, current) => accumulator + current)
+            + await fetchDealAmountAPI(result.paging.next.after);
+    } catch (error) {
+        console.error('Error fetching :', error);
+    }
+};
 
 module.exports = {
     fetchLeadCountAPI,
