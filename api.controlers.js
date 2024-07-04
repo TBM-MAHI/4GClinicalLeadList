@@ -251,11 +251,26 @@ const fetchDealAmountAPI = async (afterval = null) => {
     }
 };
 
+async function wftest(reqdata) {
+    try {
+        let testResult = {
+            outputFields: {
+                myOutput: reqdata,
+                hs_execution_state: "SUCCESS"
+            }
+        };
+        return testResult; // Return the received data
+    } catch (error) {
+        console.error('Error fetching :', error);
+    }
+}
+
 module.exports = {
     fetchLeadCountAPI,
     fetchMQLCountAPI,
     fetchSQLCountAPI,
     fetchOpportunityCountAPI,
     fetchCustomerCountAPI,
-    fetchDealAmountAPI
+    fetchDealAmountAPI,
+    wftest
 };

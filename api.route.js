@@ -44,4 +44,11 @@ api_Router.get('/dealAmount', async (req, res) => {
     return res.status(200).json({ amount: Math.round(TotalDealAmount) });
 })
 
+api_Router.post('/wftest', async (req, res) => {
+    console.log(req.body.value);
+    let wf_test_response = await api_Controllers.wftest(req.body.value);
+    console.log(`/calling WF extension route`);
+    return res.status(200).json(wf_test_response);
+})
+
 module.exports = {api_Router , getLeadCount};
