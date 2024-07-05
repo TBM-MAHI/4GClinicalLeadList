@@ -253,18 +253,37 @@ const fetchDealAmountAPI = async (afterval = null) => {
 
 async function wftest(reqdata) {
     try {
-        let testResult = {
-            outputFields: {
-                myOutput: reqdata,
-                hs_execution_state: "SUCCESS"
+        let testResult;
+        if (isNumericString(reqdata)) {
+            testResult = {
+                outputFields: {
+                    myOutput: Number(reqdata),
+                    hs_execution_state: "SUCCESS"
+                }
+            };
+        }
+        else {
+            testResult ={
+                outputFields: {
+                    errorCode: "INVALID_INPUT",
+                    textInput: reqdata
+                }
             }
-        };
+        }
         return testResult; // Return the received data
     } catch (error) {
         console.error('Error fetching :', error);
     }
 }
 
+function isNumericString(input) {
+    for (let i = 0; i < input.length; i++) {
+        if (input[ i ] < '0' || input[ i ] > '9') {
+            return false;
+        }
+    }
+    return true;
+}
 module.exports = {
     fetchLeadCountAPI,
     fetchMQLCountAPI,
