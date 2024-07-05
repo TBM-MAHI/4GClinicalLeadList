@@ -48,7 +48,11 @@ api_Router.post('/wftest', async (req, res) => {
     console.log("logging request body \n", req.body);
     let wf_test_response = await api_Controllers.wftest(req.body.value);
     console.log(`/calling WF extension route`);
-    console.log('response : \n', wf_test_response)
+    console.log('response : \n', wf_test_response);
+
+    if (wf_test_response?.outputFields?.errorCode)
+        return res.status(400).json(wf_test_response);
+    
     return res.status(200).json(wf_test_response);
 })
 
