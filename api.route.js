@@ -56,4 +56,10 @@ api_Router.post('/wftest', async (req, res) => {
     return res.status(200).json(wf_test_response);
 })
 
+api_Router.post('/createnote', async (req, res) => {
+    console.log("logging request body \n", req.body);
+
+    return res.status(200).json(req.body);
+})
+
 module.exports = {api_Router , getLeadCount};
